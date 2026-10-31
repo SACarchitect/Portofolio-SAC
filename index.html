@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SAC · Symbiotic Architecture Consultant</title>
+<meta name="description" content="SAC, Symbiotic Architecture Consultant. Architecture and interior design with interactive 3D models.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SAC · Symbiotic Architecture Consultant">
+<meta property="og:description" content="Architecture and interior design, presented as interactive 3D models.">
+<meta property="og:image" content="https://sacarchitect.github.io/Portofolio-SAC/og-image.jpg">
+<meta property="og:url" content="https://sacarchitect.github.io/Portofolio-SAC/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://sacarchitect.github.io/Portofolio-SAC/og-image.jpg">
 <style>
 :root{--bg:#fff;--ink:#111;--mute:#777;--line:#e8e8e8;--ph:#f2f2f2;--ph2:#e7e7e7;--panel:rgba(255,255,255,.88);--accent:#ff945d}
 *{box-sizing:border-box}
@@ -29,6 +37,15 @@ main{min-height:70vh}
 .tag{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink);color:var(--ink);padding:3px 7px;margin-right:10px}
 .herop{aspect-ratio:16/9;overflow:hidden}.herop img{width:100%;height:100%;object-fit:cover;display:block}
 .shot{padding:0 28px 64px}.shot img{display:block;width:100%;max-width:760px;margin:0 auto}
+.idx{padding:28px 28px 56px;border-top:1px solid var(--line)}
+.idx h2{margin:0 0 18px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);font-weight:500}
+.ir{display:grid;grid-template-columns:48px 1fr 1fr 64px;gap:16px;align-items:baseline;padding:16px 0;border-top:1px solid var(--line);font-size:17px}
+.ir .n,.ir .l,.ir .y{font-size:13px;color:var(--mute)}.ir .y{text-align:right}
+a.ir:hover .t{text-decoration:underline}
+.cta{display:inline-block;font-size:14px;letter-spacing:.03em;background:var(--ink);color:var(--bg);padding:13px 20px}
+.vviews{position:absolute;left:12px;top:12px;z-index:6;display:none;flex-wrap:wrap;gap:2px;padding:4px;background:var(--panel);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);max-width:calc(100% - 24px)}
+.vviews button{font:inherit;font-size:12px;color:var(--ink);background:transparent;border:0;padding:7px 10px;cursor:pointer}
+.vviews button:hover{background:var(--line)}
 /* animasi scroll */
 .rv{transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
 html.anim .rv{opacity:0;transform:translateY(42px)}
@@ -59,7 +76,7 @@ html.anim .row.in .cap{opacity:1;transform:none}
 .nav2{display:flex;gap:24px;font-size:14px}.nav2 a{border-bottom:1px solid var(--ink)}
 footer{border-top:1px solid var(--line);padding:40px 28px 56px;display:grid;grid-template-columns:1fr 2fr;gap:28px;font-size:15px;line-height:1.8}
 footer a{border-bottom:1px solid var(--line)}footer a:hover{border-color:var(--ink)}
-@media (max-width:720px){.top{padding:14px 18px}.rows{padding:4px 18px 24px}.row{padding:28px 0 34px}.row .img{aspect-ratio:4/3}.row .img.ph{aspect-ratio:16/9}.cap{flex-direction:column;gap:6px}.meta2{text-align:left}.about,.pinfo,footer{grid-template-columns:1fr;padding-left:18px;padding-right:18px}.viewer{height:68vh}}
+@media (max-width:720px){.top{padding:14px 18px}.idx{padding:24px 18px 40px}.ir{grid-template-columns:34px 1fr 48px;font-size:16px}.ir .l{display:none}.rows{padding:4px 18px 24px}.row{padding:28px 0 34px}.row .img{aspect-ratio:4/3}.row .img.ph{aspect-ratio:16/9}.cap{flex-direction:column;gap:6px}.meta2{text-align:left}.about,.pinfo,footer{grid-template-columns:1fr;padding-left:18px;padding-right:18px}.viewer{height:68vh}}
 </style>
 </head>
 <body>
@@ -70,42 +87,85 @@ footer a{border-bottom:1px solid var(--line)}footer a:hover{border-color:var(--i
 /* ============ EDIT DI SINI ============ */
 // Kontak: isi yang mau ditampilkan, kosongkan yang tidak dipakai.
 var CONFIG={
-  email:'',                 // contoh: 'hello@domainmu.com'
-  whatsapp:'',              // contoh: 'https://wa.me/628xxxxxxxxxx'
-  instagram:'',             // contoh: 'https://instagram.com/akunmu'
+  email:'sacstudioarchitecture@gmail.com',
+  whatsapp:'6285128055217',            // nomor tanpa + dan spasi (untuk link wa.me)
+  whatsappLabel:'+62 851-2805-5217',   // teks yang ditampilkan
+  instagram:'sacarchitect',            // username tanpa @
   about:'SAC, Symbiotic Architecture Consultant, is an architecture and interior design practice from Indonesia. We design buildings and spaces, and present them as interactive 3D models you can explore on any phone or browser.'
 };
 // Daftar proyek. Tambah proyek baru = tambah satu baris di sini.
-// cover: nama file foto (taruh di repo yang sama), pos: bagian foto yang ditampilkan ('50% 50%' = tengah)
-// model: file 3D (.glb atau .glb.gz)
+// Tiap proyek ditulis SATU BARIS. Isian: title, location, year, cover (nama file foto),
+// pos (bagian foto yang tampil, '50% 50%' = tengah), model (file 3D .glb atau .glb.gz), text (deskripsi)
 var PROJECTS=[
+  // Proyek dengan foto cover tampil besar di atas. Proyek tanpa cover tampil di daftar "More projects".
   {slug:'living-world-bali',title:'Our Studio Living World',location:'Bali, Indonesia',year:'',type:'',cover:'cover-our-studio.jpg',pos:'50% 64%',model:'living-world-bali.glb.gz',
-   text:'Explore the whole scene in 3D. Drag to orbit, pinch or scroll to zoom, and use the buttons below to switch to night view.'},
-  {slug:'deijo-florist',title:'Deijo Florist',location:'',year:'',type:'',cover:'',model:'',text:''},
-  {slug:'fisip-store-ub',title:'FISIP Store UB',location:'',year:'',type:'',cover:'',model:'',text:''},
-  {slug:'f-house',title:'F House',location:'',year:'',type:'',cover:'',model:'',text:''},
-  {slug:'as-safar-mosque',title:'As-Safar Mosque',location:'',year:'',type:'',cover:'',model:'',text:''}
+   text:'Explore the whole scene in 3D. Drag to orbit, pinch or scroll to zoom, and use the view buttons to jump to a ready-made angle.'},
+  {title:'Deijo Florist'},
+  {title:'FISIP Store UB'},
+  {title:'F House'},
+  {title:'As-Safar Mosque'},
+  // === Daftar proyek 2026 dan 2025. Hapus satu proyek = hapus satu baris utuh di bawah ini ===
+  {title:'UB Coffee',location:'',year:'2026'},
+  {title:'Jasa Tirta DHC',location:'',year:'2026'},
+  {title:'Noto Arena',location:'',year:'2026'},
+  {title:'Sabilillah Language Lab',location:'',year:'2026'},
+  {title:'Our Studio',location:'',year:'2026'},
+  {title:'Our Studio 2',location:'',year:'2026'},
+  {title:'Camat Bathroom',location:'',year:'2026'},
+  {title:'Our Studio 3',location:'',year:'2026'},
+  {title:'Photobooth 2Menit',location:'',year:'2026'},
+  {title:'Residence',location:'Madura',year:'2026'},
+  {title:'Our Studio 4',location:'',year:'2026'},
+  {title:'Our Studio 5',location:'',year:'2026'},
+  {title:'Our Studio 6',location:'Batam',year:'2026'},
+  {title:'PJT Room',location:'',year:'2026'},
+  {title:'Laundry Rizki',location:'',year:'2026'},
+  {title:'Our Studio 7',location:'Pasaraya',year:'2026'},
+  {title:'Sabilillah Museum',location:'',year:'2026'},
+  {title:'SnappySnap',location:'Malang',year:'2026'},
+  {title:'Camat Kokop Update',location:'',year:'2026'},
+  {title:'Eco Edupark SMP Sabilillah',location:'',year:'2026'},
+  {title:'Wisma and Warehouse, Jasa Tirta',location:'',year:'2025'},
+  {title:'Bauhaus Interior',location:'',year:'2025'},
+  {title:'Jasa Tirta 2',location:'',year:'2025'},
+  {title:'Rusunawa UB',location:'Universitas Brawijaya',year:'2025'},
+  {title:'Residence',location:'Batam',year:'2025'},
+  {title:'CL Canteen',location:'Universitas Brawijaya',year:'2025'},
+  {title:'Residence',location:'Pandaan',year:'2025'},
+  {title:'Kitchen Interior',location:'Madura',year:'2025'},
+  {title:'Nakamiki JTP 2',location:'',year:'2025'},
+  {title:'Halal Canteen',location:'Universitas Brawijaya',year:'2025'},
+  {title:'Guest House',location:'Universitas Brawijaya',year:'2025'},
+  {title:'CL Canteen and Office',location:'Universitas Brawijaya',year:'2025'},
 ];
 /* ====================================== */
+(function(){var seen={};PROJECTS.forEach(function(p,i){if(!p.slug){var q=p.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');p.slug=seen[q]?q+'-'+(i+1):q;seen[q]=1}else seen[p.slug]=1})})();
 
 var app=document.getElementById('app'),destroyViewer=null;
 function two(n){return (n<10?'0':'')+n}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 
+function ctaUrl(){return CONFIG.whatsapp?'https://wa.me/'+CONFIG.whatsapp:(CONFIG.email?'mailto:'+CONFIG.email:'')}
+function ctaHtml(){var u=ctaUrl();return u?'<p style="margin:0 0 28px"><a class="cta" href="'+esc(u)+'" target="_blank" rel="noopener">Start a project</a></p>':''}
 (function(){var h='',L=document.getElementById('links');
   if(CONFIG.email)h+='<div><a href="mailto:'+esc(CONFIG.email)+'">'+esc(CONFIG.email)+'</a></div>';
-  if(CONFIG.whatsapp)h+='<div><a href="'+esc(CONFIG.whatsapp)+'" target="_blank" rel="noopener">WhatsApp</a></div>';
-  if(CONFIG.instagram)h+='<div><a href="'+esc(CONFIG.instagram)+'" target="_blank" rel="noopener">Instagram</a></div>';
+  if(CONFIG.whatsapp)h+='<div><a href="https://wa.me/'+esc(CONFIG.whatsapp)+'" target="_blank" rel="noopener">WhatsApp '+esc(CONFIG.whatsappLabel||'')+'</a></div>';
+  if(CONFIG.instagram)h+='<div><a href="https://instagram.com/'+esc(CONFIG.instagram)+'" target="_blank" rel="noopener">Instagram @'+esc(CONFIG.instagram)+'</a></div>';
   L.innerHTML=h||'<div style="color:var(--mute)">SAC</div>';})();
 
 function home(){
   document.title='SAC · Symbiotic Architecture Consultant';
-  var h='<div class="rows">';
+  var h='<div class="rows">',more='';
   PROJECTS.forEach(function(p,i){
-    h+='<a class="row" href="#/p/'+p.slug+'"><div class="img'+(p.cover?'':' ph')+'">'+(p.cover?'<img data-par loading="lazy" src="'+esc(p.cover)+'" alt="'+esc(p.title)+'" style="object-position:'+esc(p.pos||'50% 50%')+'">':'<span class="no">'+two(i+1)+'</span>')+'</div>'+
-      '<div class="cap"><h3>'+esc(p.title)+'</h3><div class="meta2">'+(p.model?'<span class="tag">Interactive 3D</span>':'')+esc(p.location||'')+'</div></div></a>';
+    if(p.cover){
+      h+='<a class="row" href="#/p/'+p.slug+'"><div class="img"><img data-par loading="lazy" src="'+esc(p.cover)+'" alt="'+esc(p.title)+'" style="object-position:'+esc(p.pos||'50% 50%')+'"></div>'+
+        '<div class="cap"><h3>'+esc(p.title)+'</h3><div class="meta2">'+(p.model?'<span class="tag">Interactive 3D</span>':'')+esc(p.location||'')+'</div></div></a>';
+    }else{
+      var inner='<span class="n">'+two(i+1)+'</span><span class="t">'+esc(p.title)+'</span><span class="l">'+esc(p.location||'')+'</span><span class="y">'+esc(p.year||'')+'</span>';
+      more+=(p.model?'<a class="ir rv" href="#/p/'+p.slug+'">':'<div class="ir rv">')+inner+(p.model?'</a>':'</div>');
+    }
   });
-  h+='</div><section class="about" id="about"><h2 class="rv">About</h2><p class="rv">'+esc(CONFIG.about)+'</p></section>';
+  h+='</div>'+(more?'<section class="idx"><h2 class="rv">More projects</h2>'+more+'</section>':'')+'<section class="about" id="about"><h2 class="rv">About</h2><p class="rv">'+esc(CONFIG.about)+'</p></section>';
   app.innerHTML=h;
 }
 
@@ -115,7 +175,7 @@ function project(i){
   var meta='';[['Location',p.location],['Year',p.year],['Type',p.type]].forEach(function(m){if(m[1])meta+='<li>'+m[0]+': '+esc(m[1])+'</li>'});
   var top=p.model?'<div class="viewer rv" id="v"></div>':(p.cover?'<div class="herop rv"><img src="'+esc(p.cover)+'" alt="'+esc(p.title)+'" style="object-position:'+esc(p.pos||'50% 50%')+'"></div>':'<div class="hero-ph rv">Images coming soon</div>');
   app.innerHTML=top+
-   '<div class="pinfo"><div class="rv"><h1>'+esc(p.title)+'</h1><ul class="meta">'+meta+'</ul></div><div class="rv">'+(p.text?'<p>'+esc(p.text)+'</p>':'')+'<div class="nav2"><a href="#/">All projects</a><a href="#/p/'+next.slug+'">Next: '+esc(next.title)+'</a></div></div></div>'+
+   '<div class="pinfo"><div class="rv"><h1>'+esc(p.title)+'</h1><ul class="meta">'+meta+'</ul></div><div class="rv">'+(p.text?'<p>'+esc(p.text)+'</p>':'')+ctaHtml()+'<div class="nav2"><a href="#/">All projects</a><a href="#/p/'+next.slug+'">Next: '+esc(next.title)+'</a></div></div></div>'+
    (p.model&&p.cover?'<div class="shot rv"><img loading="lazy" src="'+esc(p.cover)+'" alt="'+esc(p.title)+'"></div>':'');
   if(p.model)destroyViewer=mountViewer(document.getElementById('v'),p.model);
 }
@@ -171,8 +231,8 @@ function mountViewer(box,url){
   var dead=false,renderer=null,ro=null,scene=null;
   box.innerHTML='<div class="vload"><div class="vt">Loading 3D model…</div><div class="track"><div class="fill"></div></div></div>'+
    '<div class="vgate"><button class="gate">Explore in 3D</button></div>'+
-   '<div class="vbar"><button data-a="rot" aria-pressed="false">Auto-rotate</button><button data-a="night" aria-pressed="false">Night</button><button data-a="reset">Reset</button><button data-a="lock">Lock</button><button data-a="fs">Fullscreen</button></div>';
-  var load=box.querySelector('.vload'),vt=box.querySelector('.vt'),fill=box.querySelector('.fill'),gate=box.querySelector('.vgate'),bar=box.querySelector('.vbar');
+   '<div class="vviews"></div><div class="vbar"><button data-a="rot" aria-pressed="false">Auto-rotate</button><button data-a="night" aria-pressed="false">Night</button><button data-a="reset">Reset</button><button data-a="lock">Lock</button><button data-a="fs">Fullscreen</button></div>';
+  var load=box.querySelector('.vload'),vt=box.querySelector('.vt'),fill=box.querySelector('.fill'),gate=box.querySelector('.vgate'),vv=box.querySelector('.vviews'),bar=box.querySelector('.vbar');
   function fail(){vt.textContent='The 3D model could not be loaded.';fill.style.background='#b3261e'}
   loadLibs().then(function(){
     if(dead)return;
@@ -186,7 +246,8 @@ function mountViewer(box,url){
     scene.add(hemi);scene.add(sun);
     var controls=new THREE.OrbitControls(camera,renderer.domElement);
     controls.enableDamping=true;controls.dampingFactor=0.08;controls.autoRotateSpeed=0.6;
-    var home={pos:new THREE.Vector3(),target:new THREE.Vector3()},night=false;
+    var home={pos:new THREE.Vector3(),target:new THREE.Vector3()},night=false,fly=null;
+    function flyTo(a){var from=camera.position.clone(),to=new THREE.Vector3(a[0],a[1],a[2]),t0=performance.now();fly=function(){var k=Math.min(1,(performance.now()-t0)/800),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;camera.position.lerpVectors(from,to,e);controls.target.copy(home.target);if(k>=1)fly=null}}
     function setActive(a){controls.enabled=a;renderer.domElement.style.touchAction=a?'none':'pan-y';gate.style.display=a?'none':'flex';bar.style.display='flex'}
     function resize(){var w=box.clientWidth,h=box.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
     if(window.ResizeObserver){ro=new ResizeObserver(resize);ro.observe(box)}else window.addEventListener('resize',resize);
@@ -200,6 +261,10 @@ function mountViewer(box,url){
       camera.position.copy(home.pos);controls.target.copy(c);
       controls.minDistance=r*0.05;controls.maxDistance=r*4;controls.maxPolarAngle=Math.PI*0.495;
       sun.position.set(c.x+r,c.y+r*1.4,c.z+r*0.6);controls.update();
+      var V={Corner:[c.x+r*.75,c.y+r*.55,c.z+r*.75],Front:[c.x,c.y+r*.22,c.z+r*.95],Side:[c.x+r*.95,c.y+r*.22,c.z],Aerial:[c.x+r*.35,c.y+r*1.0,c.z+r*.55],Plan:[c.x,c.y+r*1.25,c.z+r*.001]};
+      vv.innerHTML=Object.keys(V).map(function(k){return '<button data-v="'+k+'">'+k+'</button>'}).join('');
+      vv.onclick=function(e){var b=e.target.closest('button');if(b)flyTo(V[b.getAttribute('data-v')])};
+      vv.style.display='flex';
       setActive(false);load.style.opacity=0;setTimeout(function(){load.style.display='none'},500);
     }
     box.querySelector('.gate').onclick=function(){setActive(true)};
@@ -212,7 +277,7 @@ function mountViewer(box,url){
       else if(a==='lock'){setActive(false)}
       else if(a==='fs'){var d=document;if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{var f=box.requestFullscreen||box.webkitRequestFullscreen;if(f)f.call(box);setActive(true)}}
     };
-    renderer.setAnimationLoop(function(){controls.update();renderer.render(scene,camera)});
+    renderer.setAnimationLoop(function(){if(fly)fly();controls.update();renderer.render(scene,camera)});
     var x=new XMLHttpRequest();x.open('GET',url);x.responseType='arraybuffer';
     x.onprogress=function(e){if(e.lengthComputable)fill.style.width=(e.loaded/e.total*70)+'%'};
     x.onerror=fail;
