@@ -187,7 +187,7 @@ var PROJECTS=[
   // Info di kiri halaman detail: client, architect, size, status (kosongkan kalau tidak dipakai)
   {title:'Cafe Kopi Pojok',location:'Malang',year:'2026',cover:'cover-pojok-kopi.jpg',pos:'50% 55%',
    client:'-',architect:'Rohid Riza Nabhan S.Ars',size:'200',status:'Proposal'},
-  {title:'OUR Studio Lubuklinggau',location:'Lubuklinggau',year:'2026',cover:'cover-our-studio-lubuklinggau.webp',pos:'50% 60%',
+  {title:'OUR Studio Lubuklinggau',location:'Lubuklinggau',year:'2026',cover:'cover-our-studio-lubuklinggau.webp',pos:'50% 60%',model:'our-studio-lubuklinggau.glb.gz',
    client:'OUR Studio',architect:'Rohid Riza Nabhan S.Ars',size:'80',status:'Build'},
   {title:'Deijo Florist',location:'Bangkalan, Madura',year:'2025',cover:'cover-deijo-florist.webp',pos:'50% 72%',
    client:'Ibu Aida P.',architect:'Rohid Riza Nabhan S.Ars',size:'125',status:'Build'},
@@ -390,7 +390,7 @@ var libsP;
 function loadScript(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
 function loadLibs(){
   if(libsP)return libsP;
-  var L=['https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js','https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js','https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js','https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js'];
+  var L=['https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js','https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js','https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js','https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/environments/RoomEnvironment.js','https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js'];
   libsP=L.reduce(function(p,u){return p.then(function(){return loadScript(u)})},Promise.resolve()).catch(function(e){libsP=null;throw e});
   return libsP;
 }
@@ -398,7 +398,7 @@ function mountViewer(box,url){
   var dead=false,renderer=null,ro=null,scene=null;
   box.innerHTML='<div class="vload"><div class="vt">Loading 3D model…</div><div class="track"><div class="fill"></div></div></div>'+
    '<div class="vgate"><button class="gate">Explore in 3D</button></div>'+
-   '<div class="vviews"></div><div class="vbar"><button data-a="rot" aria-pressed="false">Auto-rotate</button><button data-a="night" aria-pressed="false">Night</button><button data-a="reset">Reset</button><button data-a="lock">Lock</button><button data-a="fs">Fullscreen</button></div>';
+   '<div class="vviews"></div><div class="vbar"><button data-a="rot" aria-pressed="false">Auto-rotate</button><button data-a="night" aria-pressed="false">Lights on</button><button data-a="reset">Reset</button><button data-a="fs">Fullscreen</button></div>';
   var load=box.querySelector('.vload'),vt=box.querySelector('.vt'),fill=box.querySelector('.fill'),gate=box.querySelector('.vgate'),vv=box.querySelector('.vviews'),bar=box.querySelector('.vbar');
   function fail(){vt.textContent='The 3D model could not be loaded.';fill.style.background='#b3261e'}
   loadLibs().then(function(){
@@ -406,14 +406,19 @@ function mountViewer(box,url){
     renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
     renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
     renderer.outputEncoding=THREE.sRGBEncoding;
+    renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+    renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.shadowMap.autoUpdate=false;
     box.insertBefore(renderer.domElement,box.firstChild);
     scene=new THREE.Scene();
+    // cahaya lingkungan lembut (pantulan & bounce light)
+    var pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromScene(new THREE.RoomEnvironment(),0.04).texture;pm.dispose();
     var camera=new THREE.PerspectiveCamera(45,1,1,10000);
-    var hemi=new THREE.HemisphereLight(0xffffff,0x8a8576,1.0),sun=new THREE.DirectionalLight(0xfff2dc,0.9);
-    scene.add(hemi);scene.add(sun);
+    var hemi=new THREE.HemisphereLight(0xffffff,0x8a8576,0.35),sun=new THREE.DirectionalLight(0xfff2dc,1.6);
+    sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.bias=-0.0004;sun.shadow.normalBias=0.02;sun.shadow.radius=4;
+    scene.add(hemi);scene.add(sun);scene.add(sun.target);var mats=[];
     var controls=new THREE.OrbitControls(camera,renderer.domElement);
     controls.enableDamping=true;controls.dampingFactor=0.08;controls.autoRotateSpeed=0.6;
-    var home={pos:new THREE.Vector3(),target:new THREE.Vector3()},night=false,fly=null;
+    var home={pos:new THREE.Vector3(),target:new THREE.Vector3()},night=false,fly=null,glow=[],bulbs=[];
     function flyTo(a){var from=camera.position.clone(),to=new THREE.Vector3(a[0],a[1],a[2]),t0=performance.now();fly=function(){var k=Math.min(1,(performance.now()-t0)/800),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;camera.position.lerpVectors(from,to,e);controls.target.copy(home.target);if(k>=1)fly=null}}
     function setActive(a){controls.enabled=a;renderer.domElement.style.touchAction=a?'none':'pan-y';gate.style.display=a?'none':'flex';bar.style.display='flex'}
     function resize(){var w=box.clientWidth,h=box.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
@@ -424,22 +429,40 @@ function mountViewer(box,url){
       scene.add(g.scene);
       var b=new THREE.Box3().setFromObject(g.scene),c=b.getCenter(new THREE.Vector3()),s=b.getSize(new THREE.Vector3()),r=Math.max(s.x,s.y,s.z);
       camera.near=r/500;camera.far=r*30;camera.updateProjectionMatrix();
-      home.target.copy(c);home.pos.set(c.x+r*0.75,c.y+r*0.55,c.z+r*0.75);
+      home.target.copy(c);home.pos.set(c.x-r*1.4,c.y+r*0.05,c.z);
       camera.position.copy(home.pos);controls.target.copy(c);
       controls.minDistance=r*0.05;controls.maxDistance=r*4;controls.maxPolarAngle=Math.PI*0.495;
-      sun.position.set(c.x+r,c.y+r*1.4,c.z+r*0.6);controls.update();
+      sun.position.set(c.x+r*0.25,c.y+r*1.5,c.z+r*0.35);sun.target.position.copy(c);controls.update();
+      var sc=sun.shadow.camera;sc.left=sc.bottom=-r*0.75;sc.right=sc.top=r*0.75;sc.near=r*0.1;sc.far=r*4;sc.updateProjectionMatrix();
+      // material SketchUp (specular-glossiness) diganti material matte standar
+      var conv=new Map();
+      function std(x){if(conv.has(x))return conv.get(x);var glass=x.opacity<0.95;
+        var n=new THREE.MeshStandardMaterial({color:x.color,map:x.map,roughness:glass?0.1:0.8,metalness:0,transparent:glass,opacity:glass?x.opacity:1,depthWrite:!glass,alphaTest:(!glass&&x.transparent)?0.5:x.alphaTest,side:x.side});n.name=x.name;conv.set(x,n);mats.push(n);return n}
+      g.scene.traverse(function(m){if(m.isMesh){m.material=Array.isArray(m.material)?m.material.map(std):std(m.material);
+        // plafon/atap tipis lebar di bagian atas tidak memberi bayangan, supaya cahaya dari atas masuk ke interior
+        var mb=new THREE.Box3().setFromObject(m),ms=mb.getSize(new THREE.Vector3());
+        var roof=ms.y<r*0.03&&ms.x*ms.z>r*r*0.04&&mb.min.y>c.y;
+        m.castShadow=!roof&&!(m.material.opacity<1);m.receiveShadow=true}});
+      renderer.shadowMap.needsUpdate=true;
+      // lampu: objek bernama LAMPU di SketchUp
+      var lamps=[];g.scene.traverse(function(o){if(/lampu/i.test(o.name||'')&&!(o.parent&&/lampu/i.test(o.parent.name||'')))lamps.push(o)});
+      lamps.forEach(function(o){o.traverse(function(m){if(m.isMesh){m.material=[].concat(m.material).map(function(x){x=x.clone();x.userData.e0=x.emissive?x.emissive.getHex():0;glow.push(x);return x});if(m.material.length===1)m.material=m.material[0]}})});
+      var step=Math.max(1,Math.ceil(lamps.length/16));
+      for(var i=0;i<lamps.length;i+=step){var pl=new THREE.PointLight(0xffc98a,0,r*0.3,2);new THREE.Box3().setFromObject(lamps[i]).getCenter(pl.position);pl.position.y-=r*0.01;scene.add(pl);bulbs.push(pl)}
       var V={Corner:[c.x+r*.75,c.y+r*.55,c.z+r*.75],Front:[c.x,c.y+r*.22,c.z+r*.95],Side:[c.x+r*.95,c.y+r*.22,c.z],Aerial:[c.x+r*.35,c.y+r*1.0,c.z+r*.55],Plan:[c.x,c.y+r*1.25,c.z+r*.001]};
       vv.innerHTML=Object.keys(V).map(function(k){return '<button data-v="'+k+'">'+k+'</button>'}).join('');
       vv.onclick=function(e){var b=e.target.closest('button');if(b)flyTo(V[b.getAttribute('data-v')])};
-      vv.style.display='flex';
-      setActive(false);load.style.opacity=0;setTimeout(function(){load.style.display='none'},500);
+      setActive(true);load.style.opacity=0;setTimeout(function(){load.style.display='none'},500);
     }
     box.querySelector('.gate').onclick=function(){setActive(true)};
     bar.onclick=function(e){
       var t=e.target.closest('button');if(!t)return;var a=t.getAttribute('data-a');
       if(a==='rot'){controls.autoRotate=!controls.autoRotate;t.setAttribute('aria-pressed',controls.autoRotate)}
-      else if(a==='night'){night=!night;t.setAttribute('aria-pressed',night);t.textContent=night?'Day':'Night';
-        renderer.setClearColor(night?0x0d1018:0x000000,night?1:0);hemi.intensity=night?0.35:1.0;sun.intensity=night?0.25:0.9;sun.color.setHex(night?0x8fa6d9:0xfff2dc)}
+      else if(a==='night'){night=!night;t.setAttribute('aria-pressed',night);t.textContent=night?'Lights off':'Lights on';
+        renderer.setClearColor(night?0x0d1018:0x000000,night?1:0);hemi.intensity=night?0.12:0.35;sun.intensity=night?0.05:1.6;
+        mats.forEach(function(m){m.envMapIntensity=night?0.12:1});sun.color.setHex(night?0x8fa6d9:0xfff2dc);
+        bulbs.forEach(function(l){l.intensity=night?1.6:0});
+        glow.forEach(function(m){if(m.emissive){m.emissive.setHex(night?0xffd29a:m.userData.e0);m.emissiveIntensity=night?1.2:1}})}
       else if(a==='reset'){camera.position.copy(home.pos);controls.target.copy(home.target);controls.update()}
       else if(a==='lock'){setActive(false)}
       else if(a==='fs'){var d=document;if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{var f=box.requestFullscreen||box.webkitRequestFullscreen;if(f)f.call(box);setActive(true)}}
