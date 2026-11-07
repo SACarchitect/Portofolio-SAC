@@ -93,7 +93,10 @@ footer a{color:var(--ink);border-bottom:1px solid var(--line)}footer a:hover{bor
 footer .fl{display:block;width:140px;margin-top:22px}
 
 /* ===== Halaman proyek ===== */
-.pg{display:grid;grid-template-columns:200px minmax(0,1fr);column-gap:32px;padding:28px 24px 64px}
+.pg{display:grid;grid-template-columns:1fr minmax(0,820px) 1fr;column-gap:32px;padding:28px 24px 64px}
+.pg .side{grid-column:1;justify-self:end;max-width:200px}.pg .body{grid-column:2}
+.herop img{margin:0 auto}
+.pg .body>.rv:last-child{text-align:center}.nav2{justify-content:center}
 .pg .side{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px;padding-top:2px;position:sticky;top:72px;align-self:start}
 .pg .side .t{font-size:17px;font-weight:400;line-height:1.25;margin:6px 0 0}
 .pg .side .loc{font-size:11px;color:var(--mute)}
@@ -110,6 +113,27 @@ footer .fl{display:block;width:140px;margin-top:22px}
 .pg .body{min-width:0}
 .pg .body p{margin:22px 0 22px;font-size:15px;font-weight:300;line-height:1.6;max-width:620px}
 .hero-ph{aspect-ratio:3/2;background:var(--ph);display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:10px}
+/* deskripsi dua bahasa */
+.desc{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin:36px 0 44px}
+.desc .lg{font-size:10px;letter-spacing:.08em;color:var(--mute);margin-bottom:8px}
+.pg .body .desc p{margin:0;font-size:14px;line-height:1.65;max-width:none}
+.desc .id p{color:#555}
+/* galeri: 1 foto besar + 4 kecil */
+.gal{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px}
+.gal>div{overflow:hidden;cursor:zoom-in;background:var(--ph)}
+.gal>div:first-child{grid-row:span 2}
+.gal img{display:block;width:100%;height:100%;object-fit:cover;aspect-ratio:4/5;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.gal>div:hover img{transform:scale(1.03)}
+@media(min-width:761px){.gal>div:first-child img{aspect-ratio:auto;position:absolute;inset:0}.gal>div:first-child{position:relative}}
+/* foto diperbesar */
+#lb{position:fixed;inset:0;z-index:60;background:rgba(255,255,255,.96);display:none;align-items:center;justify-content:center;cursor:zoom-out}
+#lb.on{display:flex}
+#lb img{max-width:92vw;max-height:90vh;display:block}
+#lb button{position:absolute;top:50%;transform:translateY(-50%);background:none;border:0;font-family:inherit;font-size:34px;font-weight:300;line-height:1;padding:16px;cursor:pointer;color:var(--ink)}
+#lb .pv{left:8px}#lb .nx{right:8px}
+.v3{margin-top:12px}
+.vgo{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+@media(max-width:760px){.desc{grid-template-columns:1fr;gap:20px}.gal{grid-template-columns:1fr 1fr}.gal>div:first-child{grid-column:1/-1;grid-row:auto}}
 .shot img{display:block;width:100%;height:auto}
 .shot{margin-top:40px;max-width:var(--col)}
 .cta{display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--ink);color:var(--bg);padding:11px 16px}
@@ -150,7 +174,8 @@ html.anim .rv.in{opacity:1;transform:none}
   .index h2,.index .rows,.empty{grid-column:1}
   .ir{grid-template-columns:24px 1fr 40px}.ir .lc{display:none}
   .about h2,footer .h{text-align:left;margin-bottom:12px}
-  .pg .side{text-align:left;align-items:flex-start;order:2;padding-top:18px;position:static}
+  .pg .side{text-align:center;align-items:center;order:2;padding-top:18px;position:static;grid-column:1;justify-self:center;max-width:none}
+  .pg .body{grid-column:1}
   .pg .body{order:3}
   .pg .viewer-wrap{order:1}
 }
@@ -188,6 +213,9 @@ var PROJECTS=[
   {title:'Cafe Kopi Pojok',location:'Malang',year:'2026',cover:'cover-pojok-kopi.jpg',pos:'50% 55%',
    client:'-',architect:'Rohid Riza Nabhan S.Ars',size:'200',status:'Proposal'},
   {title:'OUR Studio Lubuklinggau',location:'Lubuklinggau',year:'2026',cover:'cover-our-studio-lubuklinggau.webp',pos:'50% 60%',model:'our-studio-lubuklinggau.glb.gz',
+   text_en:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+   text_id:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.',
+   gallery:['our-studio-1.webp','our-studio-2.webp','our-studio-3.webp','our-studio-4.webp','our-studio-5.webp'],
    client:'OUR Studio',architect:'Rohid Riza Nabhan S.Ars',size:'80',status:'Build'},
   {title:'Deijo Florist',location:'Bangkalan, Madura',year:'2025',cover:'cover-deijo-florist.webp',pos:'50% 72%',
    client:'Ibu Aida P.',architect:'Rohid Riza Nabhan S.Ars',size:'125',status:'Build'},
@@ -289,17 +317,31 @@ function project(i){
   document.title=p.title+' · SAC';
   catsEl.innerHTML=catsHtml(p.year||'-');
   var info='';[['Client',p.client],['Architect',p.architect],['Size m²',p.size],['Typology',p.type],['Status',p.status]].forEach(function(m){if(m[1])info+='<dt>'+m[0]+'</dt><dd>'+esc(m[1])+'</dd>'});
-  var top=p.model?'<div class="viewer" id="v"></div>':(p.cover?'<div class="herop"><img src="'+esc(p.cover)+'" alt="'+esc(p.title)+'"></div>':'<div class="hero-ph up">Images coming soon</div>');
+  // foto utama di atas; 3D hanya dimuat saat tombol diklik
+  var top=p.cover?'<div class="herop"><img src="'+esc(p.cover)+'" alt="'+esc(p.title)+'"></div>':(p.model?'':'<div class="hero-ph up">Images coming soon</div>');
+  var gal=(p.gallery||[]).map(function(s,k){return '<div class="rv" data-k="'+k+'"><img loading="lazy" src="'+esc(s)+'" alt="'+esc(p.title)+'"></div>'}).join('');
+  var desc=(p.text_en||p.text_id)?'<div class="desc rv">'+(p.text_en?'<div><div class="lg">EN</div><p>'+esc(p.text_en)+'</p></div>':'')+(p.text_id?'<div class="id"><div class="lg">ID</div><p>'+esc(p.text_id)+'</p></div>':'')+'</div>':'';
+  var v3=p.model?'<div class="v3 rv"><div class="viewer" id="v"><div class="vgo"><button class="gate">Explore 3D</button><span class="vt">Interactive model · lights on / off</span></div></div></div>':'';
   app.innerHTML='<div class="pg"><div class="side"><span class="badge">'+two(i+1)+'</span><h1 class="t">'+esc(p.title)+'</h1>'+(p.location?'<span class="loc up">'+esc(p.location)+'</span>':'')+
     (p.year?'<span class="yr">'+esc(p.year)+'</span>':'')+(info?'<dl class="info up">'+info+'</dl>':'')+'</div>'+
-    '<div class="body"><div class="viewer-wrap">'+top+'</div>'+(p.text?'<p class="rv">'+esc(p.text)+'</p>':'<div style="height:22px"></div>')+'<div class="rv">'+ctaHtml()+
-    '<div class="nav2"><a href="#/">All projects</a><a href="#/p/'+next.slug+'">Next: '+esc(next.title)+'</a></div></div>'+
-    (p.model&&p.cover?'<div class="shot rv"><img loading="lazy" src="'+esc(p.cover)+'" alt="'+esc(p.title)+'"></div>':'')+'</div></div>';
-  if(p.model)destroyViewer=mountViewer(document.getElementById('v'),p.model);
+    '<div class="body"><div class="viewer-wrap">'+top+'</div>'+desc+(p.text?'<p class="rv">'+esc(p.text)+'</p>':'')+
+    (gal?'<div class="gal">'+gal+'</div>':'')+v3+'<div class="rv" style="margin-top:40px">'+ctaHtml()+
+    '<div class="nav2"><a href="#/">All projects</a><a href="#/p/'+next.slug+'">Next: '+esc(next.title)+'</a></div></div></div></div>';
+  var g=app.querySelector('.gal');if(g)g.onclick=function(e){var d=e.target.closest('[data-k]');if(d)openLb(p.gallery,+d.getAttribute('data-k'))};
+  if(p.model)app.querySelector('.vgo .gate').onclick=function(){destroyViewer=mountViewer(document.getElementById('v'),p.model)};
   var hero=app.querySelector('.herop img');
   if(zoomFrom&&hero)zoomTo(hero);
   zoomFrom=null;
   setupAnim();
+}
+
+/* ===== Lihat foto galeri ukuran besar ===== */
+var lb,lbList,lbI;
+function openLb(list,i){
+  if(!lb){lb=document.createElement('div');lb.id='lb';lb.innerHTML='<img alt=""><button class="pv" aria-label="Previous">‹</button><button class="nx" aria-label="Next">›</button>';document.body.appendChild(lb);
+    lb.onclick=function(e){var b=e.target.closest('button');if(b){lbI=(lbI+(b.className==='nx'?1:-1)+lbList.length)%lbList.length;lb.firstChild.src=lbList[lbI]}else lb.classList.remove('on')};
+    document.addEventListener('keydown',function(e){if(!lb.classList.contains('on'))return;if(e.key==='Escape')lb.classList.remove('on');else if(e.key==='ArrowRight')lb.querySelector('.nx').click();else if(e.key==='ArrowLeft')lb.querySelector('.pv').click()})}
+  lbList=list;lbI=i;lb.firstChild.src=list[i];lb.classList.add('on');
 }
 
 /* ===== Zoom halus: foto di beranda membesar ke posisi di halaman detail ===== */
