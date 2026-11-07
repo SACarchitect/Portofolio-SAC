@@ -87,10 +87,11 @@ a.ir:hover .tt{text-decoration:underline}
 .about{display:grid;grid-template-columns:1fr minmax(0,var(--col)) 1fr;column-gap:16px;padding:56px 24px 72px;border-top:1px solid var(--line)}
 .about h2{margin:0;text-align:right;font-size:10px;font-weight:400;color:var(--mute)}
 .about p{margin:0;font-size:17px;font-weight:300;line-height:1.55}
-footer{display:grid;grid-template-columns:1fr minmax(0,var(--col)) 1fr;column-gap:16px;padding:40px 24px 56px;border-top:1px solid var(--line);font-size:12px;line-height:1.9}
-footer .h{text-align:right;font-size:10px;color:var(--mute)}
+footer{display:grid;grid-template-columns:1fr;justify-items:center;text-align:center;padding:40px 24px 56px;border-top:1px solid var(--line);font-size:12px;line-height:1.9}
+footer .h{text-align:center;font-size:10px;color:var(--mute);margin-bottom:8px}
 footer a{color:var(--ink);border-bottom:1px solid var(--line)}footer a:hover{border-color:var(--ink)}
-footer .fl{display:block;width:140px;margin-top:22px}
+footer .fl{display:block;width:140px;margin:22px auto 0}
+.pg .body p.ctap{max-width:none;margin:0}
 
 /* ===== Halaman proyek ===== */
 .pg{display:grid;grid-template-columns:1fr minmax(0,820px) 1fr;column-gap:32px;padding:28px 24px 64px}
@@ -176,7 +177,7 @@ html.anim .rv.in{opacity:1;transform:none}
   .item .l{margin-top:0;width:100%}
   .index h2,.index .rows,.empty{grid-column:1}
   .ir{grid-template-columns:24px 1fr 40px}.ir .lc{display:none}
-  .about h2,footer .h{text-align:left;margin-bottom:12px}
+  .about h2{text-align:left;margin-bottom:12px}
   /* halaman proyek HP: foto dulu, lalu judul & info rata kiri */
   .pg{padding-top:8px}
   .pg .body{display:contents}
@@ -272,7 +273,7 @@ var reduce=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').
 
 /* ===== Kontak ===== */
 function ctaUrl(){return CONFIG.whatsapp?'https://wa.me/'+CONFIG.whatsapp:(CONFIG.email?'mailto:'+CONFIG.email:'')}
-function ctaHtml(){var u=ctaUrl();return u?'<p style="margin:0"><a class="cta" href="'+esc(u)+'" target="_blank" rel="noopener">Start a project</a></p>':''}
+function ctaHtml(){var u=ctaUrl();return u?'<p class="ctap" style="margin:0"><a class="cta" href="'+esc(u)+'" target="_blank" rel="noopener">Start a project</a></p>':''}
 (function(){var h='',L=document.getElementById('links');
   if(CONFIG.email)h+='<div><a href="mailto:'+esc(CONFIG.email)+'">'+esc(CONFIG.email)+'</a></div>';
   if(CONFIG.whatsapp)h+='<div><a href="https://wa.me/'+esc(CONFIG.whatsapp)+'" target="_blank" rel="noopener">WhatsApp '+esc(CONFIG.whatsappLabel||'')+'</a></div>';
