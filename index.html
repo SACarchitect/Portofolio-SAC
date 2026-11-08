@@ -125,6 +125,13 @@ footer .fl{display:block;width:140px;margin:22px auto 0}
 .gal>div:first-child{grid-row:span 2}
 .gal img{display:block;width:100%;height:100%;object-fit:cover;aspect-ratio:4/5;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
 .gal>div:hover img{transform:scale(1.03)}
+/* galeri 4 foto: kotak 2x2 */
+.gal.g4{grid-template-columns:1fr 1fr}.gal.g4>div:first-child{grid-row:auto;grid-column:auto}
+.gal.g4>div:first-child img{position:static;aspect-ratio:4/5}
+/* gambar teknik (aksonometri dll), lebar penuh tanpa terpotong */
+.drw{margin-top:12px}.drw img{display:block;width:100%;height:auto}
+/* foto ke-6 dst: berpasangan, dua kolom sama lebar */
+.gal>div:nth-child(n+6):nth-child(even){grid-column:1}.gal>div:nth-child(n+6):nth-child(odd){grid-column:2/-1}
 @media(min-width:761px){.gal>div:first-child img{aspect-ratio:auto;position:absolute;inset:0}.gal>div:first-child{position:relative}}
 /* foto diperbesar */
 #lb{position:fixed;inset:0;z-index:60;background:rgba(255,255,255,.96);display:none;align-items:center;justify-content:center;cursor:zoom-out}
@@ -134,7 +141,7 @@ footer .fl{display:block;width:140px;margin:22px auto 0}
 #lb .pv{left:8px}#lb .nx{right:8px}
 .v3{margin-top:12px}
 .vgo{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
-@media(max-width:760px){.desc{grid-template-columns:1fr;gap:20px}.gal{grid-template-columns:1fr 1fr}.gal>div:first-child{grid-column:1/-1;grid-row:auto}}
+@media(max-width:760px){.desc{grid-template-columns:1fr;gap:20px}.gal{grid-template-columns:1fr 1fr}.gal>div:first-child{grid-column:1/-1;grid-row:auto}.gal>div:nth-child(n+6){grid-column:auto!important}}
 .shot img{display:block;width:100%;height:auto}
 .shot{margin-top:40px;max-width:var(--col)}
 .cta{display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--ink);color:var(--bg);padding:11px 16px}
@@ -225,14 +232,20 @@ var PROJECTS=[
   {title:'Cafe Kopi Pojok',location:'Malang',year:'2026',cover:'cover-pojok-kopi.jpg',pos:'50% 55%',
    client:'-',architect:'Rohid Riza Nabhan S.Ars',size:'200',status:'Proposal'},
   {title:'OUR Studio Lubuklinggau',location:'Lubuklinggau',year:'2026',cover:'cover-our-studio-lubuklinggau.webp',pos:'50% 60%',model:'our-studio-lubuklinggau.glb.gz',
-   text_en:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-   text_id:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.',
+   text_en:'OUR Studio Lubuklinggau is a vintage photobox studio set inside a shopping mall. The 80 m² unit is styled like a classic hotel lobby: deep burgundy walls, wood panelling with brass trims and a black-and-white checkered floor. Each photo booth is staged as its own room, from a lift door and a numbered hotel door to an ON AIR corner, while a backlit vinyl wall and a reception desk welcome visitors from the mall corridor.',
+   text_id:'OUR Studio Lubuklinggau adalah studio photobox bergaya vintage di dalam pusat perbelanjaan. Unit seluas 80 m² ini dirancang layaknya lobi hotel klasik: dinding merah marun, panel kayu dengan aksen kuningan, dan lantai kotak-kotak hitam putih. Setiap booth foto dibuat seperti ruangan tersendiri, mulai dari pintu lift, pintu kamar hotel bernomor, hingga sudut ON AIR, sementara dinding piringan hitam dengan lampu latar dan meja resepsionis menyambut pengunjung dari koridor mall.',
    gallery:['our-studio-1.webp','our-studio-2.webp','our-studio-3.webp','our-studio-4.webp','our-studio-5.webp'],
    client:'OUR Studio',architect:'Rohid Riza Nabhan S.Ars',size:'80',status:'Build'},
   {title:'Deijo Florist',location:'Bangkalan, Madura',year:'2025',cover:'cover-deijo-florist.webp',pos:'50% 72%',
-   client:'Ibu Aida P.',architect:'Rohid Riza Nabhan S.Ars',size:'125',status:'Build'},
+   client:'Ibu Aida P.',architect:'Rohid Riza Nabhan S.Ars',size:'125',status:'Build',
+   text_en:'Deijo Florist pairs a flower shop with a retro game corner under one roof. A white, textured mass floats above an open ground floor of exposed brick walls, hanging vines and a rock garden, with a terracotta signage system that guides visitors from the street. Inside, the game club turns playful: grid tiles, pixel graphics and neon tube lighting create a relaxed space for gathering.',
+   text_id:'Deijo Florist menggabungkan toko bunga dan game corner bernuansa retro dalam satu bangunan. Massa putih bertekstur seolah melayang di atas lantai dasar yang terbuka, dengan dinding bata ekspos, tanaman rambat, dan taman batu, serta signage terakota yang mengarahkan pengunjung dari jalan. Di dalam, game club tampil lebih playful: keramik grid, grafis pixel, dan lampu neon menciptakan ruang santai untuk berkumpul.',
+   gallery:['deijo-1.webp','deijo-2.webp','deijo-3.webp','deijo-4.webp','deijo-5.webp','deijo-6.webp','deijo-7.webp']},
   {title:'FISIP Store',location:'Brawijaya University',year:'2025',cover:'cover-fisip-store.webp',pos:'50% 62%',
-   client:'Brawijaya University',architect:'Rohid Riza Nabhan S.Ars',size:'75',status:'Proposal'},
+   client:'Brawijaya University',architect:'Rohid Riza Nabhan S.Ars',size:'75',status:'Proposal',
+   text_en:'FISIP Store is a 75 m² merchandise shop for the Faculty of Social and Political Sciences, Brawijaya University, run by UB Merch. The compact pavilion opens to the campus through full-height glass, crowned by a perforated screen of ornamental panels that carries the store name. Inside, slim steel racks with timber shelves keep the space light, while terracotta floor tiles, warm wood panelling and a woven textile display bring a local character to the collection.',
+   text_id:'FISIP Store adalah toko merchandise seluas 75 m² untuk Fakultas Ilmu Sosial dan Ilmu Politik, Universitas Brawijaya, yang dikelola UB Merch. Paviliun kompak ini terbuka ke area kampus melalui dinding kaca setinggi plafon, dengan mahkota berupa panel ornamen berlubang yang memuat nama toko. Di dalam, rak besi ramping dengan papan kayu membuat ruang terasa ringan, sementara lantai terakota, panel kayu hangat, dan pajangan kain tenun memberi karakter lokal pada koleksinya.',
+   gallery:['fisip-1.webp','fisip-2.webp','fisip-3.webp','fisip-4.webp'],drawing:'fisip-axo.webp'},
   {title:'UB Merch Store',location:'Transmart Malang',year:'2025',cover:'cover-ub-merch-store.webp',pos:'50% 55%',
    client:'Brawijaya University',architect:'Rohid Riza Nabhan S.Ars',size:'65',status:'Build'},
   {title:'Nakamiki',location:'Transmart Malang',year:'2025',cover:'cover-nakamiki.webp',pos:'50% 58%',
@@ -337,7 +350,8 @@ function project(i){
   app.innerHTML='<div class="pg"><div class="side"><span class="badge">'+two(i+1)+'</span><h1 class="t">'+esc(p.title)+'</h1>'+(p.location?'<span class="loc up">'+esc(p.location)+'</span>':'')+
     (p.year?'<span class="yr">'+esc(p.year)+'</span>':'')+(info?'<dl class="info up">'+info+'</dl>':'')+'</div>'+
     '<div class="body"><div class="viewer-wrap">'+top+'</div>'+desc+(p.text?'<p class="rv">'+esc(p.text)+'</p>':'')+
-    (gal?'<div class="gal">'+gal+'</div>':'')+v3+'<div class="rv" style="margin-top:40px">'+ctaHtml()+
+    (gal?'<div class="gal g'+p.gallery.length+'">'+gal+'</div>':'')+
+    (p.drawing?'<div class="drw rv"><img loading="lazy" src="'+esc(p.drawing)+'" alt="'+esc(p.title)+' drawing"></div>':'')+v3+'<div class="rv" style="margin-top:40px">'+ctaHtml()+
     '<div class="nav2"><a href="#/">All projects</a><a href="#/p/'+next.slug+'">Next: '+esc(next.title)+'</a></div></div></div></div>';
   var g=app.querySelector('.gal');if(g)g.onclick=function(e){var d=e.target.closest('[data-k]');if(d)openLb(p.gallery,+d.getAttribute('data-k'))};
   if(p.model)app.querySelector('.vgo .gate').onclick=function(){destroyViewer=mountViewer(document.getElementById('v'),p.model)};
