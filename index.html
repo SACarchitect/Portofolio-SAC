@@ -87,6 +87,18 @@ a.ir:hover .tt{text-decoration:underline}
 .about{display:grid;grid-template-columns:1fr minmax(0,var(--col)) 1fr;column-gap:16px;padding:56px 24px 72px;border-top:1px solid var(--line)}
 .about h2{margin:0;text-align:right;font-size:10px;font-weight:400;color:var(--mute)}
 .about p{margin:0;font-size:17px;font-weight:300;line-height:1.55}
+.about.aboutpg{border-top:0;padding-top:40px;min-height:60vh}
+.tools a.on{color:var(--ink)}
+/* biodata */
+.prof{display:grid;grid-template-columns:180px 1fr;gap:24px;margin-top:48px;padding-top:40px;border-top:1px solid var(--line)}
+.prof img{display:block;width:100%;height:auto}
+.prof h3{margin:0;font-size:20px;font-weight:400}
+.prof .pm{font-size:11px;color:var(--mute);line-height:1.6;margin:6px 0 16px;letter-spacing:.02em}
+.about .prof p{font-size:13px;line-height:1.65;color:#444;margin:0 0 12px}
+.cv{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:32px}
+.cv .ch{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:12px}
+.ci{font-size:12px;line-height:1.55;margin-bottom:16px;color:#444}
+.ci b{display:block;font-weight:500;color:var(--ink)}.ci span{display:block;color:var(--mute);font-size:11px}
 footer{display:grid;grid-template-columns:1fr;justify-items:center;text-align:center;padding:40px 24px 56px;border-top:1px solid var(--line);font-size:12px;line-height:1.9}
 footer .h{text-align:center;font-size:10px;color:var(--mute);margin-bottom:8px}
 footer a{color:var(--ink);border-bottom:1px solid var(--line)}footer a:hover{border-color:var(--ink)}
@@ -185,6 +197,10 @@ html.anim .rv.in{opacity:1;transform:none}
   .index h2,.index .rows,.empty{grid-column:1}
   .ir{grid-template-columns:24px 1fr 40px}.ir .lc{display:none}
   .about h2{text-align:left;margin-bottom:12px}
+  .prof{grid-template-columns:120px 1fr;gap:16px}.prof>div{display:contents}
+  .prof h3,.prof .pm{grid-column:2}.prof h3{align-self:end}.prof .pm{margin-bottom:0}.prof img{grid-row:1/3;align-self:start}
+  .prof p{grid-column:1/-1}
+  .cv{grid-template-columns:1fr}
   /* halaman proyek HP: foto dulu, lalu judul & info rata kiri */
   .pg{padding-top:8px}
   .pg .body{display:contents}
@@ -286,6 +302,18 @@ var reduce=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').
 
 /* ===== Kontak ===== */
 function ctaUrl(){return CONFIG.whatsapp?'https://wa.me/'+CONFIG.whatsapp:(CONFIG.email?'mailto:'+CONFIG.email:'')}
+// Biodata arsitek (bagian About)
+var PROFILE='<div class="prof rv">'+
+  '<img src="rohid.webp" alt="Rohid Riza Nabhan" loading="lazy">'+
+  '<div><h3>Rohid Riza Nabhan</h3><div class="pm">Architect<br>Born June 19, 2003 · Jember, Indonesia</div>'+
+  '<p>I view architecture as a seamless bridge between human lifestyle and the natural world. Through biophilic principles, I focus on creating safe, comfortable spaces that foster a deep, organic connection between people and their environment.</p>'+
+  '<p>My design language is defined by unique material exploration and distinct textures. I strive to craft sustainable structures that are not only visually compelling but also enrich the daily experience of those who inhabit them.</p></div></div>'+
+  '<div class="cv rv"><div><div class="ch">Experience</div>'+
+  '<div class="ci"><b>CV. Andyrahman Architect</b>Internship Architect<span>Jan – Jul 2025</span></div>'+
+  '<div class="ci"><b>PT. Kosa Matra Graha</b>Internship Supervisory<span>Aug – Dec 2024</span></div></div>'+
+  '<div><div class="ch">Education</div>'+
+  '<div class="ci"><b>Bachelor of Architecture</b>Brawijaya University, Indonesia<span>2022 – 2026 · GPA 3.88 / 4.00</span></div>'+
+  '<div class="ci"><b>Award</b>2nd Best Design Assignment, Desain Arsitektur 3, among 150 students<span>2023</span></div></div></div>';
 function ctaHtml(){var u=ctaUrl();return u?'<p class="ctap" style="margin:0"><a class="cta" href="'+esc(u)+'" target="_blank" rel="noopener">Start a project</a></p>':''}
 (function(){var h='',L=document.getElementById('links');
   if(CONFIG.email)h+='<div><a href="mailto:'+esc(CONFIG.email)+'">'+esc(CONFIG.email)+'</a></div>';
@@ -312,8 +340,15 @@ function home(year){
   curYear=year||'';
   document.title='SAC · Symbiotic Architecture Consultant';
   catsEl.innerHTML=catsHtml(curYear);
-  app.innerHTML='<div id="list"></div><section class="about" id="about"><h2 class="up rv">About</h2><p class="rv">'+esc(CONFIG.about)+'</p></section>';
+  app.innerHTML='<div id="list"></div>';
   renderList();
+}
+/* ===== Halaman About (terpisah dari portofolio) ===== */
+function aboutPage(){
+  document.title='About · SAC';
+  catsEl.innerHTML=catsHtml('-');
+  app.innerHTML='<section class="about aboutpg" id="about"><h2 class="up rv">About</h2><div><p class="rv">'+esc(CONFIG.about)+'</p>'+PROFILE+'</div></section>';
+  setupAnim();
 }
 function renderList(){
   var feed='',first=true;
@@ -442,13 +477,11 @@ function route(){
   if(destroyViewer){destroyViewer();destroyViewer=null}
   var h=location.hash,m=h.match(/^#\/p\/([^\/]+)/),y=h.match(/^#\/y\/(\d+)/),idx=-1;
   if(m)PROJECTS.forEach(function(p,i){if(p.slug===m[1])idx=i});
+  var ab=document.querySelector('.tools a[href="#about"]');if(ab)ab.classList.toggle('on',h==='#about');
   if(idx>=0){project(idx);window.scrollTo(0,0)}
-  else{
-    var sameHome=!!document.getElementById('list')&&(h==='#about'||h==='#contact');
-    if(!sameHome)home(y?y[1]:'');
-    var t=(h==='#about'||h==='#contact')?document.getElementById(h.slice(1)):null;
-    if(t)t.scrollIntoView();else window.scrollTo(0,0);
-  }
+  else if(h==='#about'){aboutPage();window.scrollTo(0,0)}
+  else if(h==='#contact'){document.getElementById('contact').scrollIntoView()}
+  else{home(y?y[1]:'');window.scrollTo(0,0)}
   topbar.classList.remove('hide');
 }
 window.addEventListener('hashchange',route);route();
