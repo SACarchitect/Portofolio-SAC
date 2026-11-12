@@ -201,11 +201,12 @@ html.anim .rv.in{opacity:1;transform:none}
   /* About HP: gaya editorial */
   .about.aboutpg{padding-top:20px}
   .about p{font-size:15px;line-height:1.6}
-  .prof{grid-template-columns:1fr;gap:0;margin-top:36px;padding-top:0;border-top:0}
-  .prof img{width:150px;aspect-ratio:4/5;object-fit:cover;object-position:50% 25%}
-  .prof h3{font-size:24px;margin-top:20px}
-  .prof .pm{margin:4px 0 20px}
-  .about .prof p{font-size:13.5px}
+  /* foto kiri, teks kanan seperti di laptop */
+  .prof{grid-template-columns:36% 1fr;gap:14px;margin-top:32px;padding-top:28px}
+  .prof img{width:100%}
+  .prof h3{font-size:17px}
+  .prof .pm{font-size:10px;margin:4px 0 12px}
+  .about .prof p{font-size:12px;line-height:1.6;margin-bottom:10px}
   .cv{grid-template-columns:1fr;gap:0;margin-top:12px}
   .cv>div{border-top:1px solid var(--line);padding-top:18px;margin-top:18px}
   .ci{display:grid;grid-template-columns:1fr auto;column-gap:12px;margin-bottom:14px}
